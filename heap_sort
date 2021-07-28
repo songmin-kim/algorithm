@@ -1,0 +1,84 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+
+const int LM = 500005;
+int N, HEAP[LM], hn;
+
+void swap(int* a, int* b) {
+    int temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
+void Make_heap() {
+
+    hn = 0;
+    int temp = 0;
+    for (int i = 1; i <= N; i++) {
+        scanf("%d", &HEAP[++hn]);
+        temp = hn;
+        while (HEAP[temp] > HEAP[temp / 2] && temp > 1)
+        {
+            swap(&HEAP[temp], &HEAP[temp / 2]);
+            temp /= 2;
+        }
+    }
+}
+
+void Check_heap(int end) {
+
+    int c = 1;
+    if (end == 1)return;
+
+    while (1) {
+
+        int lc = 2 * c;
+        int rc = 2 * c + 1;
+        int bc;
+
+        // lc가 끝까지 왔거나, rc보다 크면 bc로 선정
+        if (HEAP[lc] > HEAP[rc] || lc == end) bc = lc;
+        else bc = rc;
+
+        if (HEAP[c] < HEAP[bc]) swap(&HEAP[c], &HEAP[bc]); 
+        else break;
+
+        c = bc;
+        if (c > end / 2) break;
+
+    }
+
+    return;
+}
+
+void Sort_heap() {
+
+    int temp = N;
+    for (int i = 1; i < N; i++) {
+        swap(&HEAP[1], &HEAP[temp]);
+        temp--;
+        Check_heap(temp);
+    }
+}
+
+void Print_heap() {
+
+    for (int i = 1; i <= N; i++) {
+        printf("%d ", HEAP[i]);
+    }
+    puts("");
+
+}
+
+int main() {
+    //freopen("input.txt","r",stdin);
+    scanf("%d", &N);
+
+    Make_heap();
+    Print_heap();
+
+    Sort_heap();
+    Print_heap();
+
+    return 0;
+}
